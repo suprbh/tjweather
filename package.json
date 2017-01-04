@@ -1,0 +1,20 @@
+{
+  "name": "conversationkit",
+  "version": "1.0.0",
+  "description": "TJ Bot Weather recipe",
+  "main": "weather.js",
+  "scripts": {
+    "start": "node weather.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Supriya Bhat",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "mic": "^2.1.1",
+    "request": "^2.79.0",
+    "watson-developer-cloud": "^2.2.0"
+  }
+}
