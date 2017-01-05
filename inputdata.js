@@ -52,3 +52,7 @@ exports.states = {
 	'wisconsin' : 'WI',
 	'wyoming' : 'WY'
 	};
+
+exports.getStateCode = function(stateStr) {
+	return exports.states[stateStr];
+};
