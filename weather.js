@@ -1,13 +1,13 @@
 /************************************************************************
 *
 * Author: Supriya Bhat
-* 
-* Description: 
+*
+* Description:
 * A robot which responds to weather related questions.
 * This module uses Watson Speech to Text, Watson Weather Insights, and Watson Text to Speech.
-* 
+*
 * To run: node weather.js
-* 
+*
 */
 
 var watson = require('watson-developer-cloud'); //to connect to Watson developer cloud
@@ -19,8 +19,8 @@ var weatherResponse = require('./weather_response.js'); // contains all the mapp
 var attentionWord = config.attentionWord; //you can change the attention word in the config file
 
 /************************************************************************
-* Configuring IBM Bluemix Credentials for : 
-* Watson Speech to Text, 
+* Configuring IBM Bluemix Credentials for :
+* Watson Speech to Text,
 * Watson Text to Speech,
 * IBM Weather Insights
 ************************************************************************
@@ -48,7 +48,7 @@ microphone input events e.g on error, startcomplete, pause, stopcomplete etc.
 
 // Initiate Microphone Instance to Get audio samples
 var mic = require('mic');
-var micInstance = mic({ 'rate': '44100', 'channels': '2', 'debug': false, 'exitOnSilence': 6 });
+var micInstance = mic({ 'rate': '44100', 'channels': '2', 'debug': false, 'exitOnSilence': 8 });
 var micInputStream = micInstance.getAudioStream();
 
 micInputStream.on('data', function(data) {
@@ -88,7 +88,7 @@ textStream.setEncoding('utf8');
 * Step #4: Parsing the Text and create a weather response
 *********************************************************************
 * In this step, we parse the text to look for attention word and send that sentence to get appropriate weather response.
-* Once the attention word is detected,the text is sent to processed to look for weather related keywords. 
+* Once the attention word is detected,the text is sent to processed to look for weather related keywords.
 * The response is generated using Weather Insights api and is sent back to the module.
 */
 var context = {} ; // Save information on conversation context/stage for continous conversation
@@ -97,90 +97,78 @@ textStream.setEncoding('utf8');
 textStream.on('data', function(str) {
   console.log(' ===== Speech to Text ===== : ' + str); // print the text once received
 
-
   if (str.toLowerCase().indexOf(attentionWord.toLowerCase()) >= 0) {
 	    var foundIntent = false; // Default intent
 		var watsonResponse = "Sorry, I didn't understand that. Can you please say it again?"; // Default response
 		
+
 		var res = str.toLowerCase().replace(attentionWord.toLowerCase(), "");
-		
+
 		console.log("msg sent to weather insights:" ,res);
-		// res = "weather in cupertino california";
-		// Get location - city, state
+
 		for(var i = 0; i < inputdata.intents.length; i++) {
 			if (res.indexOf(inputdata.intents[i]) > -1) {
 				foundIntent = true;
 				console.log("Calling createWeatherResponse for" , inputdata.intents[i]);
-				// res = "weather in cupertino california";
+				
 				weatherResponse.createWeatherResponse(inputdata.intents[i], res, function(err, response){
-					
+
 					if(err)
 					{
-						console.log("Encountered an error while retriveing weather data");
+						//console.log("Encountered an error while retriveing weather data");
 						console.log(response);
-						watsonResponse = "Sorry, I could not get weather information";
+						watsonResponse = response;
 					} else {
-						
+
 						if (response != undefined ){
 							// Create a personal response from watson
-							
-							watsonResponse = "It is " + response.skyCondition + " with a temperature of " + response.temp + " degrees fahrenheit. The wind speed is " + response.windspeed; 
-							watsonResponse += "miles per hour. Also, the UV index is " + response.uv;	  
-							  var params = {
-								text: watsonResponse,
-								voice: config.voice,
-								accept: 'audio/wav'
-							  };
 
-							  console.log("Result from conversation:" ,watsonResponse);
-							  /*********************************************************************
-							  Step #5: Speak out the response
-							  *********************************************************************
-							  In this step, we text is sent out to Watsons Text to Speech service and result is piped to wave file.
-							  Wave files are then played using alsa (native audio) tool.
-							  */
-							  tempStream = text_to_speech.synthesize(params).pipe(fs.createWriteStream('output.wav')).on('close', function() {
-								var create_audio = exec('aplay output.wav', function (error, stdout, stderr) {
-								  if (error !== null) {
-									console.log('exec error: ' + error);
-								  }
-								});
-							  });
+							watsonResponse = "The " + response.intent + " in " + response.city + " " + response.state + " is " + response.skyCondition + " with a temperature of " + response.temp + " degrees fahrenheit. The wind speed is " + response.windspeed;
+							watsonResponse += "miles per hour. Also, the UV index is " + response.uv;
+
 						}
 					}
-		  
+					
+					speakResponse(watsonResponse);
+					// return;	
+
 				}); // end createWeatherResponse
 			}
-			
-		}
-		if (!foundIntent) {
-		  var params = {
-			text: watsonResponse,
-			voice: config.voice,
-			accept: 'audio/wav'
-		  };
 
-		  console.log("Result from conversation:" ,watsonResponse);
-		  /*********************************************************************
-		  Step #5: Speak out the response
-		  *********************************************************************
-		  In this step, we text is sent out to Watsons Text to Speech service and result is piped to wave file.
-		  Wave files are then played using alsa (native audio) tool.
-		  */
-		  tempStream = text_to_speech.synthesize(params).pipe(fs.createWriteStream('output.wav')).on('close', function() {
-			var create_audio = exec('aplay output.wav', function (error, stdout, stderr) {
-			  if (error !== null) {
-				console.log('exec error: ' + error);
-			  }
-			});
-		  });
-	  }
+		} 
+		if (!foundIntent) {
+			watsonResponse = "I did not hear a weather intent. I am a talking weather bot, please ask me questions such as, what is the weather in san francisco california?"; // Default response
+			speakResponse(watsonResponse);
+		}
 
 	} // If attentionWord is heard
 	else {
 		console.log("Waiting to hear", attentionWord);
-	}   
+	}
 });
+
+speakResponse = function(watsonResponse) {
+	var params = {
+		text: watsonResponse,
+		voice: config.voice,
+		accept: 'audio/wav'
+		};
+
+	console.log("Result from conversation:" ,watsonResponse);
+	/*********************************************************************
+	 Step #5: Speak out the response
+	 *********************************************************************
+	 In this step, we text is sent out to Watsons Text to Speech service and result is piped to wave file.
+	 Wave files are then played using alsa (native audio) tool.
+	 */
+	 tempStream = text_to_speech.synthesize(params).pipe(fs.createWriteStream('output.wav')).on('close', function() {
+		var create_audio = exec('aplay output.wav', function (error, stdout, stderr) {
+		  if (error !== null) {
+			console.log('exec error: ' + error);
+		  }
+		});
+	 });
+}
 
 textStream.on('error', function(err) {
   console.log(' === Watson Speech to Text : An Error has occurred =====') ; // handle errors
