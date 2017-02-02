@@ -162,7 +162,7 @@ speakResponse = function(watsonResponse) {
 	 Wave files are then played using alsa (native audio) tool.
 	 */
 	 tempStream = text_to_speech.synthesize(params).pipe(fs.createWriteStream('output.wav')).on('close', function() {
-		var create_audio = exec('aplay output.wav', function (error, stdout, stderr) {
+		var create_audio = exec('aplay -D plughw:0,0 output.wav', function (error, stdout, stderr) {
 		  if (error !== null) {
 			console.log('exec error: ' + error);
 		  }
