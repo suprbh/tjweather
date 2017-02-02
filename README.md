@@ -5,7 +5,7 @@
 
 Video [demo here](link).
 
-This module provides Node.js code to talk to TJBot and get a response back on the current weather conditions. It uses [Watson Speech to Text](https://www.ibm.com/watson/developercloud/speech-to-text.html) to parse audio from the microphone, processes your commands (e.g ask a weather related question) using [IBM Weather Insights API] and uses [Watson Text to Speech](https://www.ibm.com/watson/developercloud/text-to-speech.html) to "read" out a text response!
+This module provides Node.js code to talk to IBM TJBot and get a response back on the current weather conditions. It uses [Watson Speech to Text](https://www.ibm.com/watson/developercloud/speech-to-text.html) to parse audio from the microphone, processes your commands (e.g ask a weather related question) using [IBM Weather Insights API] and uses [Watson Text to Speech](https://www.ibm.com/watson/developercloud/text-to-speech.html) to "read" out a text response!
 
 **This is designed to run on a Pi with a microphone and speaker attached. See [Connecting mic and speaker](#todo) for how to connect your  mic and speaker**
 Before you start, it is recommended you become familiar with setting up your TJBot/Raspberry Pi by looking at [the instructions here.](http://www.instructables.com/member/TJBot/)
@@ -26,7 +26,7 @@ Note: You must have a mic and speaker connected to your Pi.
 - [Raspberry Pi 3](https://www.amazon.com/dp/B01C6Q2GSY/ref=wl_it_dp_o_pC_nS_ttl?_encoding=UTF8&colid=1BLM6IHU3K1MA&coliid=I1WPZOVL411972)
 - [USB microphone](https://www.amazon.com/dp/B005BRET3G/ref=wl_it_dp_o_pC_nS_ttl?_encoding=UTF8&colid=1BLM6IHU3K1MA&coliid=I1C98I7HIFPNJE)
 - [Speaker with 3.5mm audio jack](https://www.amazon.com/gp/product/B014SOKX1E/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
-- [TJBot](http://ibm.biz/mytjbot) - You can 3D print or laser cut the robot
+- [IBM TJBot](http://ibm.biz/mytjbot) - You can 3D print or laser cut the robot
 
 
 ##Build
