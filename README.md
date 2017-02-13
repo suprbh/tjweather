@@ -93,5 +93,4 @@ There are a few things you can do .. and ways to take your robot forward!
 - [mic](https://www.npmjs.com/package/mic) npm package : for reading audio input
 
 ## License
-#test
 MIT License
