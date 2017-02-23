@@ -1,5 +1,5 @@
 # TJ Weather
-<img src="/images/test.gif" width="100%">
+<img src="/images/tj.gif" width="100%">
 
 > Don't forget to say "Watson" when you talk to it!
 
