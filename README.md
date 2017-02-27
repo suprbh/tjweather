@@ -3,7 +3,7 @@
 
 > Don't forget to say "Watson" when you talk to it!
 
-Video [demo here](link).
+Video [demo here](https://youtu.be/Q7a6UK8U-DM).
 
 This module provides Node.js code to talk to IBM TJBot and get a response back on the current weather conditions. It uses [Watson Speech to Text](https://www.ibm.com/watson/developercloud/speech-to-text.html) to parse audio from the microphone, processes your commands (e.g ask a weather related question) using [IBM Weather Insights API] and uses [Watson Text to Speech](https://www.ibm.com/watson/developercloud/text-to-speech.html) to "read" out a text response!
 
